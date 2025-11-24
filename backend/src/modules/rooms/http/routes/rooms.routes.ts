@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { CreateRoomController } from "../controllers/CreateRoomController";
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated";
+import { GetRoomsController } from "../controllers/GetRoomsController";
 
 const roomsRouter = Router()
 
 const createRoomController = new CreateRoomController()
+const getRoomsController = new GetRoomsController()
 
 /**
  * @swagger
@@ -60,5 +62,45 @@ const createRoomController = new CreateRoomController()
  *         description: Não autorizado - token ausente ou inválido
  */
 roomsRouter.post("/", ensureAuthenticated, createRoomController.handle)
+
+/**
+ * @swagger
+ * /rooms:
+ *   get:
+ *     tags:
+ *       - Rooms
+ *     summary: Lista todas as salas
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: 'Bearer token. Formato: "Bearer <JWT>"'
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Lista de salas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *       '401':
+ *         description: Não autorizado - token ausente ou inválido
+ */
+roomsRouter.get("/", ensureAuthenticated, getRoomsController.handle)
 
 export {roomsRouter}

@@ -18,6 +18,11 @@ class RoomsRepository implements IRoomsRepository {
         });
         return room;
     }
+
+    async find(): Promise<Room[]>{
+        const rooms = await this.repository.room.findMany()
+        return rooms
+    }
 }
 
 export {RoomsRepository}

@@ -3,16 +3,17 @@ import 'express-async-errors'; // Quando da erro joga direto para o tratamento d
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import AppError from '@shared/errors/AppError';
-import '@shared/container'
 
-import { router } from '@modules/accounts/http/routes';
+import { userRouter } from '@modules/accounts/http/routes';
+import { roomRouter } from '@modules/rooms/http/routes';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use(router)
+app.use(userRouter)
+app.use(roomRouter)
 
 app.get('/', (req: Request, res: Response) => {
   return res.json({ message: "Backend Tech4Um Rodando!" });

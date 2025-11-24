@@ -1,15 +1,14 @@
-import {inject, injectable} from "tsyringe"
 import {hash} from "bcryptjs"
 import { ICreateUserDTO } from "../dtos/ICreateUserDTO"
 import { IUsersRepository } from "../repositories/IUsersRepository"
 import AppError from "@shared/errors/AppError";
+import { UsersRepository } from "../infra/prisma/repositories/UsersRepository";
 
-@injectable()
 class CreateUserService {
-    constructor(
-        @inject("UsersRepository")
-        private usersRepository: IUsersRepository
-    ) {}
+    private usersRepository: IUsersRepository;
+    constructor() {
+        this.usersRepository = new UsersRepository();
+    }
 
     async execute({name, email, password}: ICreateUserDTO) {
         const userAlreadyExists = await this.usersRepository.findByEmail(email)
@@ -26,7 +25,7 @@ class CreateUserService {
             password: passwordHash
         });
 
-        return user
+        return user;
     }
 }
 

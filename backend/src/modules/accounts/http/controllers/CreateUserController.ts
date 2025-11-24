@@ -15,7 +15,7 @@ class CreateUserController {
 
         return res.status(201).json(user);
         } catch(err){
-            throw new AppError("Dados invalidos!", 401)
+            throw new AppError("Credenciais inválidas!", 401)
         }
     }
 }

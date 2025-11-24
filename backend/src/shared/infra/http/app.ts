@@ -6,6 +6,7 @@ import AppError from '@shared/errors/AppError';
 
 import { userRouter } from '@modules/accounts/http/routes';
 import { roomRouter } from '@modules/rooms/http/routes';
+import { swaggerRoutes } from './routes/swagger.routes';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use(userRouter)
 app.use(roomRouter)
+app.use("/api-docs", swaggerRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   return res.json({ message: "Backend Tech4Um Rodando!" });

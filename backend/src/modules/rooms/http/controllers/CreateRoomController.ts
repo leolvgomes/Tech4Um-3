@@ -14,7 +14,7 @@ class CreateRoomController {
             })
             return res.status(201).json(room)
         } catch (err) {
-            throw new AppError("Dados invalidos!", 401)
+            throw new AppError("Dados invalidos!", 400)
         }
     }
 }

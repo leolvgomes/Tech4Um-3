@@ -16,13 +16,13 @@ class LoginUserService {
         const user = await this.userRepository.findByEmail(email);
 
         if (!user) {
-            throw new AppError("Login with incorrect info");
+            throw new AppError("Incorrect credencials");
         }
 
         const passwordMatched = await compare(password, user.password);
 
         if (!passwordMatched) {
-            throw new AppError("Login with incorrect info");
+            throw new AppError("Incorrect credencials");
         }
 
         const token = sign({}, "segredinho", {

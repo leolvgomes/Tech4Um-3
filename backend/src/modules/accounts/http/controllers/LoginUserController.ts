@@ -1,4 +1,5 @@
 import { LoginUserService } from "@modules/accounts/services/LoginUserService";
+import AppError from "@shared/errors/AppError";
 import { Request, Response } from "express";
 
 class LoginUserController{
@@ -7,9 +8,13 @@ class LoginUserController{
 
         const loginUserService = new LoginUserService()
 
-        const tokenResponse = await loginUserService.execute({email, password})
+        try{
+            const tokenResponse = await loginUserService.execute({email, password})
+            return res.status(200).json( tokenResponse )
+        } catch(err){
+            throw new AppError("Credenciais inválidas!", 401)
+        }
 
-        return res.status(200).json( tokenResponse )
     }
 }
 

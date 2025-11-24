@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f4f6f8;
+}
+
+.header a {
+  color: #5E7488;
+  text-decoration: none;
+  display: flex;
+  gap: 16px;
+}
+
+#loginIcon{
+    width: 24px;
+    height: 24px;
+     border-radius: 20%;  
+    border: 2px solid #5E7488; 
+    padding: 4px; 
+    object-fit: cover;
+}

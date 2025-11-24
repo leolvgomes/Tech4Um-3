@@ -36,9 +36,23 @@ const loginUserController = new LoginUserController();
  *                 type: string
  *     responses:
  *       '201':
- *         description: Conta criada com sucesso!
- *       '401':
- *         description: Credenciais inválidas!
+ *         description: Conta criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
+ *       '400':
+ *         description: Dados inválidos
  */
 usersRoutes.post("/", createUserController.handle);
 
@@ -64,8 +78,23 @@ usersRoutes.post("/", createUserController.handle);
  *     responses:
  *       '200':
  *         description: Autenticação bem-sucedida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: O Token JWT gerado
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
  *       '401':
- *         description: Credenciais inválidas
+ *         description: Credenciais inválidas (Email ou senha incorretos)
  */
 usersRoutes.post("/login", loginUserController.handle);
 

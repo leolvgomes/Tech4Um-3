@@ -43,6 +43,17 @@ const createRoomController = new CreateRoomController()
  *     responses:
  *       '201':
  *         description: Sala criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   description: Nome da sala criada
+ *                 description:
+ *                   type: string
+ *                   description: Descrição da sala
  *       '400':
  *         description: Dados inválidos
  *       '401':

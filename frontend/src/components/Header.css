@@ -6,11 +6,16 @@
   background-color: #f4f6f8;
 }
 
-.header a {
+.header button {
   color: #5E7488;
   text-decoration: none;
   display: flex;
+  align-items: center;
   gap: 16px;
+  border: none;
+  outline: none; /* remove contorno ao clicar */
+  background: none; /* opcional, deixa sem fundo */
+  cursor: pointer;
 }
 
 #loginIcon{

@@ -1,0 +1,99 @@
+/* Fundo escurecido */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+
+  z-index: 1000;
+}
+
+/* Caixa do modal */
+.modal-content {
+  background: #d9d9d9;                
+  padding: 40px 55px;                  
+  border-radius: 16px;                 
+  width: 420px;                         
+  box-shadow: 0 0 25px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.titulo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Formulário */
+.modal-content form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  
+}
+
+/* Label */
+label {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: -10px;
+}
+
+/* Inputs */
+.entrada {
+  padding: 12px;
+  font-size: 15px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 0;
+
+}
+
+/* Botão */
+.botao {
+  width: 100%;
+  padding: 12px;
+  background-color: #1772b2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.botao:hover {
+  background-color: #0f5686;
+}
+
+/* Link inferior */
+.modal-content h3 {
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 22px;
+}
+
+.modal-content h3 a {
+  color: #1772b2;
+  text-decoration: none;
+}

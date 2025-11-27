@@ -9,11 +9,18 @@ const listMessagesController = new ListMessagesController()
 
 /**
  * @swagger
- * /messages/:room_id:
+ * tags:
+ *   - name: Messages
+ *     description: Gerenciamento de mensagens
+ */
+/**
+ * @swagger
+ * /messages/{room_id}:
  *   post:
  *     tags:
  *       - Messages
  *     summary: Enviar mensagem (Pública ou Privada)
+ *     description: Envia uma mensagem para a sala informada. Se `receiver_id` for informado, a mensagem será privada.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -49,12 +56,6 @@ const listMessagesController = new ListMessagesController()
  *         description: Requisição inválida
  *       '401':
  *         description: Token inválido ou ausente
- */
-messagesRoutes.post("/:room_id", ensureAuthenticated, createMessageController.handle);
-
-/**
- * @swagger
- * /messages/{room_id}:
  *   get:
  *     tags:
  *       - Messages
@@ -114,9 +115,8 @@ messagesRoutes.post("/:room_id", ensureAuthenticated, createMessageController.ha
  *         description: Não autorizado — token ausente ou inválido
  *       '404':
  *         description: Sala não encontrada
- *       '500':
- *         description: Erro interno do servidor
  */
+messagesRoutes.post("/:room_id", ensureAuthenticated, createMessageController.handle);
 messagesRoutes.get("/:room_id", ensureAuthenticated, listMessagesController.handle)
 
 export{messagesRoutes}

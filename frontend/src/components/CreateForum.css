@@ -1,0 +1,103 @@
+.create-forum {
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 18px;
+  background: #e9ecf0;
+  border-radius: 14px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+}
+
+/* Avatar */
+.create-forum-left {
+  flex: 0 0 auto;
+}
+
+.create-forum-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+/* Middle – textarea ocupa todo o espaço */
+.create-forum-middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.create-forum-input {
+  width: 100%;
+  min-height: 52px;
+  max-height: 180px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #cfd6dd;
+  border-radius: 10px;
+  resize: none;
+  overflow: hidden;
+  font-size: 15px;
+  color: #1f2d36;
+  box-sizing: border-box;
+}
+
+.create-forum-input:focus {
+  outline: none;
+  border-color: #a9b8c5;
+  box-shadow: 0 0 0 3px rgba(95, 149, 199, 0.2);
+}
+
+/* Botão */
+.create-forum-right {
+  flex: 0 0 auto;
+}
+
+.create-forum-button {
+  background: #1f74c0;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  white-space: nowrap;
+  transition: 0.15s ease;
+}
+
+.create-forum-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(31, 116, 192, 0.3);
+}
+
+.create-forum-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mensagem de erro */
+.create-forum-error {
+  margin-top: 6px;
+  color: #c34d4d;
+  font-size: 13px;
+}
+
+/* Responsivo */
+@media (max-width: 680px) {
+  .create-forum {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .create-forum-right {
+    width: 100%;
+  }
+
+  .create-forum-button {
+    width: 100%;
+    text-align: center;
+  }
+}

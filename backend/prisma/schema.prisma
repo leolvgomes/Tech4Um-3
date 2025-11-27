@@ -15,6 +15,8 @@ model User {
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   RoomUser   RoomUser[]
+  messages_sent     Message[] @relation("SentMessages")
+  messages_received Message[] @relation("ReceivedMessages")
 
   @@map("users")
 }
@@ -22,9 +24,10 @@ model User {
 model Room {
   id          String     @id @default(uuid())
   name        String
-  description String
+  description String?
   created_at  DateTime   @default(now())
   RoomUser    RoomUser[]
+  messages Message[]
 
   @@map("rooms")
 }
@@ -41,4 +44,21 @@ model RoomUser {
   joined_at DateTime @default(now())
 
   @@map("rooms_users")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  created_at DateTime @default(now())
+
+  sender_id String
+  sender    User   @relation("SentMessages", fields: [sender_id], references: [id])
+
+  room_id   String
+  room      Room   @relation(fields: [room_id], references: [id])
+
+  receiver_id String?
+  receiver    User?   @relation("ReceivedMessages", fields: [receiver_id], references: [id])
+
+  @@map("messages")
 }

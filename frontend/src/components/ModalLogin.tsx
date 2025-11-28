@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./Modal.css";
 import logo from "../assets/img/Logo.png";
+import { AuthContext } from "../api/AuthContext";
 
 interface ModalLoginProps {
   aberto: boolean;
@@ -11,19 +12,21 @@ interface ModalLoginProps {
 export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: ModalLoginProps) {
   if (!aberto) return null;
 
+  const { login } = useContext(AuthContext); // <-- PEGAR LOGIN DO CONTEXTO
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   async function logar(e: React.FormEvent) {
-    e.preventDefault(); // impede recarregar a página
+    e.preventDefault();
 
     try {
       const resposta = await fetch("http://localhost:3333/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email,
-          password: password,
+          email,
+          password,
         }),
       });
 
@@ -35,9 +38,8 @@ export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: Modal
         return;
       }
 
-      if (dados.token) {
-        localStorage.setItem("token", dados.token);
-      }
+      // CHAMA O CONTEXTO → ATUALIZA O HEADER NA HORA
+      login(dados.token, dados.user);
 
       alert("Login realizado com sucesso!");
       fechar();
@@ -51,7 +53,6 @@ export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: Modal
   return (
     <div className="modal-overlay" onClick={fechar}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-
         <div className="titulo">
           <h2>Faça login no</h2>
           <img src={logo} alt="" />
@@ -61,7 +62,7 @@ export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: Modal
           <div className="camposForm">
             <label htmlFor="email">E-mail</label>
             <input
-            className="entrada"
+              className="entrada"
               type="text"
               id="email"
               value={email}
@@ -72,7 +73,7 @@ export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: Modal
           <div className="camposForm">
             <label htmlFor="password">Senha</label>
             <input
-            className="entrada"
+              className="entrada"
               type="password"
               id="password"
               value={password}
@@ -80,7 +81,7 @@ export default function ModalLogin({ aberto, fechar, trocarParaCadastro }: Modal
             />
           </div>
 
-          <input  className="botao"  type="submit" value="Entrar" />
+          <input className="botao" type="submit" value="Entrar" />
         </form>
 
         <h3>

@@ -1,0 +1,41 @@
+.dashboard-header {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 30px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-title h1 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #1f1f1f;
+  margin: 0;
+}
+
+.dashboard-title p {
+  font-size: 20px;
+  color: #6e6e6e;
+  margin: 5px 0 0;
+}
+
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}

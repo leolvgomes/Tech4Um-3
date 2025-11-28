@@ -2,11 +2,11 @@ import { useState } from "react";
 import "./GroupsPanel.css";
 
 const groups = [
-  { title: "asdjejf", creator: "Um Nome", members: 48 },
-  { title: "amsde", creator: "Um Nome", members: 55 },
-  { title: "masde", creator: "Um Nome", members: 2 },
-  { title: "tpgepr", creator: "Um Nome", members: 12 },
-  { title: "asdpelf", creator: "Um Nome", members: 70 },
+  { title: "Teste1", creator: "Um Nome", members: 48 },
+  { title: "Teste2", creator: "Um Nome", members: 55 },
+  { title: "Teste3", creator: "Um Nome", members: 2 },
+  { title: "Teste4", creator: "Um Nome", members: 12 },
+  { title: "Teste5", creator: "Um Nome", members: 70 },
 ];
 
 export function GroupsPanel() {

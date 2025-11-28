@@ -1,14 +1,13 @@
 import { Header } from "./components/Header";
-import { CreateForum } from "./components/CreateForum";
-import { ForumCards } from "./components/ForumCards";
 import { ForumPage } from "./components/Forum/ForumPage";
+import { Dashboard } from "./components/Dashboard/Dashboard";
 
 function App() {
 
   return (
     <>
       <Header />
-      <ForumPage/>
+      <Dashboard />
     </>
   )
 }

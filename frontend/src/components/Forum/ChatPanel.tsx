@@ -1,48 +1,61 @@
 import { useState } from "react";
 import "./ChatPanel.css";
 
-const messages = [
-  {
-    name: "Eduardo Santos",
-    text: "Opa! Bora bater um papo!",
-    image: "https://i.pravatar.cc/40?img=12",
-  },
-  {
-    name: "Rafael Moura",
-    text: "Fala time!",
-    image: "https://i.pravatar.cc/40?img=22",
-  },
-  {
-    name: "Camila Duarte",
-    text: "Oi, tudo bem com voces?",
-    image: "https://i.pravatar.cc/40?img=32",
-  },
-];
+type Message = {
+  id?: string;
+  content: string;
+  created_at?: string;
+  sender?: { name?: string; email?: string; id?: string };
+};
 
-export function ChatPanel() {
+interface ChatPanelProps {
+  roomName?: string;
+  createdBy?: string;
+  messages?: Message[];
+  onSend?: (content: string) => Promise<void> | void;
+}
+
+export function ChatPanel({ roomName = "Sala", createdBy = "", messages = [], onSend }: ChatPanelProps) {
+  const [input, setInput] = useState("");
+
+  async function handleSend() {
+    const content = input.trim();
+    if (!content) return;
+    if (onSend) {
+      try {
+        await onSend(content);
+      } catch (err) {
+        console.error("Erro ao enviar mensagem:", err);
+      }
+    }
+    setInput("");
+  }
+
   return (
     <main className="chat-panel">
       <div className="chat-header">
-        <h2>Product Development Stuff</h2>
+        <h2>{roomName}</h2>
         <span className="chat-created-by">
-          Criado por: <b>Eduardo Santos</b>
+          {createdBy ? (
+            <>
+              Criado por: <b>{createdBy}</b>
+            </>
+          ) : null}
         </span>
       </div>
 
       <div className="chat-messages">
         {messages.map((m, idx) => (
-          <div className="chat-item" key={idx}>
-            <img src={m.image} alt={m.name} className="chat-avatar" />
-
+          <div className="chat-item" key={m.id ?? idx}>
             <div className="chat-content">
-              <span className="chat-author">{m.name}</span>
-              <p className="chat-text">{m.text}</p>
+              <span className="chat-author">{m.sender?.name ?? "Anon"}</span>
+              <p className="chat-text">{m.content}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="chat-typing">Amanda Oliveira está digitando…</div>
+      <div className="chat-typing">&nbsp;</div>
 
       <div className="chat-input-box">
         <div className="chat-input-header">Enviando para todos do 4um</div>
@@ -52,8 +65,16 @@ export function ChatPanel() {
             type="text"
             placeholder="Escreva aqui uma mensagem maneira para mandar para os colegas..."
             className="chat-input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
           />
-          <button className="chat-send-button">➤</button>
+          <button className="chat-send-button" onClick={handleSend}>➤</button>
         </div>
       </div>
     </main>

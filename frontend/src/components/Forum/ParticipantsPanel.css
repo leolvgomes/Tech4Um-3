@@ -16,6 +16,37 @@
   font-size: 15px;
 }
 
+.participants-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.participants-back-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 6px;
+}
+
+.participants-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.participants-back-arrow {
+  font-weight: 700;
+}
+
+.participants-back-text {
+  font-size: 14px;
+  color: #3a6dd8;
+}
+
 .participants-title {
   font-size: 18px;
   font-weight: 700;

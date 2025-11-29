@@ -1,15 +1,18 @@
 import { Header } from "./components/Header";
 import { ForumPage } from "./components/Forum/ForumPage";
 import { Dashboard } from "./components/Dashboard/Dashboard";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-
   return (
     <>
       <Header />
-      <Dashboard />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/forum/:id" element={<ForumPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./ForumCard.css";
 
 interface ForumCardProps {
@@ -10,10 +11,12 @@ interface ForumCardProps {
 }
 
 export function ForumCard({ id, title, creator = "", people = 0, highlight = false, description = "" }: ForumCardProps) {
+  const navigate = useNavigate();
+
   function enter() {
-    if (id) {
-      window.location.href = `/forum/${id}`;
-    }
+    if (!id) return;
+    // navigate with a small state flag so ForumPage knows navigation came from dashboard
+    navigate(`/forum/${id}`, { state: { fromDashboard: true } });
   }
 
   return (

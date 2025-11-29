@@ -5,9 +5,9 @@ class ListMessagesController{
     async handle(req: Request, res: Response){
         const {room_id} = req.params
 
-        const ListMessagesService = new ListaMessagesService
+        const listMessagesService = new ListaMessagesService()
 
-        const messages = ListMessagesService.execute(room_id)
+        const messages = await listMessagesService.execute(room_id)
 
         return res.json(messages)
     }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ModalCriarForum.css";
 interface ModalCriarForumProps {
   aberto: boolean;
@@ -6,13 +7,15 @@ interface ModalCriarForumProps {
 }
 
 export default function ModalCriarForum({ aberto, fechar }: ModalCriarForumProps) {
-  if (!aberto) return null;
+  const navigate = useNavigate();
 
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [categoria, setCategoria] = useState("");
 
-  function criarForum(e: React.FormEvent) {
+  if (!aberto) return null;
+
+  async function criarForum(e: React.FormEvent) {
     e.preventDefault();
 
     if (!titulo.trim() || !descricao.trim() || !categoria.trim()) {
@@ -20,46 +23,44 @@ export default function ModalCriarForum({ aberto, fechar }: ModalCriarForumProps
       return;
     }
 
-    // Call backend to create the room and navigate to its chat page on success
-    (async () => {
-      try {
-        const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:3333/rooms", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify({ name: titulo, description: descricao }),
-        });
+      const res = await fetch("http://localhost:3333/rooms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ name: titulo, description: descricao }),
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (!res.ok) {
-          console.error("Erro ao criar fórum:", data);
-          alert(data.message || "Erro ao criar fórum");
-          return;
-        }
-
-        // Expected backend response contains the created room (with `id`)
-        const roomId = data.id || data.room?.id;
-
-        alert("Fórum criado com sucesso!");
-        fechar();
-
-        if (roomId) {
-          // Navigate to forum chat page. The app should provide a route like `/forum/:id`.
-          window.location.href = `/forum/${roomId}`;
-        } else {
-          // Fallback: reload or open forum list
-          window.location.reload();
-        }
-      } catch (err) {
-        console.error("Erro ao criar fórum:", err);
-        alert("Erro ao criar fórum. Tente novamente.");
+      if (!res.ok) {
+        console.error("Erro ao criar fórum:", data);
+        alert(data.message || "Erro ao criar fórum");
+        return;
       }
-    })();
+
+      // Expected backend response contains the created room (with `id`)
+      const roomId = data.id || data.room?.id;
+
+      alert("Fórum criado com sucesso!");
+
+      if (roomId) {
+        fechar();
+        // navigate with state so ForumPage knows navigation originated here
+        navigate(`/forum/${roomId}`, { state: { fromDashboard: true } });
+      } else {
+        // Fallback: refresh grid by reloading
+        fechar();
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Erro ao criar fórum:", err);
+      alert("Erro ao criar fórum. Tente novamente.");
+    }
   }
 
   return (

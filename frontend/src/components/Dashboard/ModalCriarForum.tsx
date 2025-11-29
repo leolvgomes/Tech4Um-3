@@ -20,17 +20,53 @@ export default function ModalCriarForum({ aberto, fechar }: ModalCriarForumProps
       return;
     }
 
-    console.log("Fórum criado:", { titulo, descricao, categoria });
+    // Call backend to create the room and navigate to its chat page on success
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-    alert("Fórum criado com sucesso!");
-    fechar();
+        const res = await fetch("http://localhost:3333/rooms", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({ name: titulo, description: descricao }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.error("Erro ao criar fórum:", data);
+          alert(data.message || "Erro ao criar fórum");
+          return;
+        }
+
+        // Expected backend response contains the created room (with `id`)
+        const roomId = data.id || data.room?.id;
+
+        alert("Fórum criado com sucesso!");
+        fechar();
+
+        if (roomId) {
+          // Navigate to forum chat page. The app should provide a route like `/forum/:id`.
+          window.location.href = `/forum/${roomId}`;
+        } else {
+          // Fallback: reload or open forum list
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error("Erro ao criar fórum:", err);
+        alert("Erro ao criar fórum. Tente novamente.");
+      }
+    })();
   }
 
   return (
     <div className="modal-overlay" onClick={fechar}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="titulo">
-            <h2>Crie um novo 4UM</h2>
+          <h2>Crie um novo 4UM</h2>
         </div>
 
         <form onSubmit={criarForum}>

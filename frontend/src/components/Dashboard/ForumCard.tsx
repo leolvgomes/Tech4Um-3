@@ -1,17 +1,23 @@
-import { useState } from "react";
 import "./ForumCard.css";
 
 interface ForumCardProps {
+  id?: string;
   title: string;
-  creator: string;
-  people: number;
-  highlight: boolean;
+  creator?: string;
+  people?: number;
+  highlight?: boolean;
+  description?: string;
 }
 
-export function ForumCard({ title, creator, people, highlight }: ForumCardProps) {
+export function ForumCard({ id, title, creator = "", people = 0, highlight = false, description = "" }: ForumCardProps) {
+  function enter() {
+    if (id) {
+      window.location.href = `/forum/${id}`;
+    }
+  }
+
   return (
     <div className={`forum-card ${highlight ? "highlight" : ""}`}>
-      
       {highlight && (
         <span className="forum-highlight-tag">Tópico em destaque!</span>
       )}
@@ -20,15 +26,17 @@ export function ForumCard({ title, creator, people, highlight }: ForumCardProps)
 
       <span className="forum-people">{people} pessoas</span>
 
-      <p className="forum-description">
-        O que temos de bom nessa sala, pessoal? Bora falar...
-      </p>
+      <p className="forum-description">{description || "O que temos de bom nessa sala, pessoal? Bora falar..."}</p>
 
-      <span className="forum-creator">
-        Criado por: <b>{creator}</b>
-      </span>
+      {creator && (
+        <span className="forum-creator">
+          Criado por: <b>{creator}</b>
+        </span>
+      )}
 
-      <button className="forum-enter">↪</button>
+      <button className="forum-enter" onClick={enter} aria-label={`Entrar no fórum ${title}`}>
+        ↪
+      </button>
     </div>
   );
 }

@@ -1,13 +1,4 @@
-.chat-panel {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  height: 85%;
-  display: flex;
-  flex-direction: column;
-  width: 95%;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-}
+
 
 .chat-header {
   display: flex;
@@ -16,10 +7,35 @@
   color: #004caa;
 }
 
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  /* recomendo usar vh para garantir altura conhecida */
+  height: calc(100vh - 120px); /* ajuste conforme seu header/espacamento externo */
+  max-height: 100%;
+  padding: 30px;
+  box-sizing: border-box;
 }
+
+.chat-messages {
+  overflow-y: auto;
+  /* garante que a área de mensagens ocupe todo o espaço disponível */
+  flex: 1 1 auto;
+  min-height: 0; /* IMPORTANTE para evitar overflow do flex child */
+}
+
+/* mantém o input sempre visível no final do painel */
+.chat-input-box {
+  position: sticky;
+  bottom: 0;
+  margin-top: 12px; /* opcional */
+  background: #0f63d8;
+  color: white;
+  border-radius: 14px;
+  padding: 14px;
+  z-index: 10; /* garante sobreposição se necessário */
+}
+
 
 .chat-item {
   display: flex;
@@ -48,12 +64,7 @@
   color: #888;
 }
 
-.chat-input-box {
-  background: #0f63d8;
-  color: white;
-  border-radius: 14px;
-  padding: 14px;
-}
+
 
 .chat-input-header {
   font-size: 13px;

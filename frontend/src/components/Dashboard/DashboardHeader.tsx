@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext } from "react";
 import "./DashboardHeader.css";
+import { AuthContext } from "../../api/AuthContext";
 
 export function DashboardHeader() {
+  const { user } = useContext(AuthContext);
+
   return (
     <header className="dashboard-header">
       <div className="dashboard-title">
@@ -10,11 +13,8 @@ export function DashboardHeader() {
       </div>
 
       <div className="dashboard-user">
-        <span className="user-name">User</span>
-        <img
-          src="/user.jpg"
-          className="user-avatar"
-        />
+        <span className="user-name">{user?.name ?? "Convidado"}</span>
+        <img src="/user.jpg" className="user-avatar" />
       </div>
     </header>
   );

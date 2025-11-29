@@ -7,13 +7,15 @@ import "./Dashboard.css";
 
 export function Dashboard() {
     const [modalAberto, setModalAberto] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
     return (
         <div className="dashboard-page">
             <DashboardHeader />
 
-            <SearchBar abrirCriar={() => setModalAberto(true)} />
+            <SearchBar abrirCriar={() => setModalAberto(true)} onSearch={(q) => setSearchQuery(q)} />
 
-            <ForumGrid />
+            <ForumGrid query={searchQuery} />
 
             <ModalCriarForum
                 aberto={modalAberto}

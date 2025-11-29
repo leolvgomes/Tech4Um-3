@@ -9,7 +9,7 @@ type Room = {
   created_at?: string;
 };
 
-export function ForumGrid() {
+export function ForumGrid({ query }: { query?: string }) {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,9 +50,16 @@ export function ForumGrid() {
   if (loading) return <div className="forum-grid">Carregando fóruns...</div>;
   if (error) return <div className="forum-grid">{error}</div>;
 
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? rooms.filter((r) =>
+      r.name.toLowerCase().includes(q) || (r.description || "").toLowerCase().includes(q)
+    )
+    : rooms;
+
   return (
     <div className="forum-grid">
-      {rooms.map((r) => (
+      {filtered.map((r) => (
         <ForumCard
           key={r.id}
           id={r.id}
@@ -63,6 +70,7 @@ export function ForumGrid() {
           description={r.description || ""}
         />
       ))}
+      {filtered.length === 0 && <div className="no-results">Nenhum fórum encontrado.</div>}
     </div>
   );
 }

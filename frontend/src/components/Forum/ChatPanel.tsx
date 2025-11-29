@@ -63,7 +63,7 @@ export function ChatPanel({ roomName = "Sala", createdBy = "", messages = [], on
         <div className="chat-input-row">
           <input
             type="text"
-            placeholder="Escreva aqui uma mensagem maneira para mandar para os colegas..."
+            placeholder="Escreva aqui uma mensagem..."
             className="chat-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}

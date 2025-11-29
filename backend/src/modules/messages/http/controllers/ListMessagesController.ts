@@ -7,7 +7,7 @@ class ListMessagesController{
 
         const listMessagesService = new ListaMessagesService()
 
-        const messages = await listMessagesService.execute(room_id)
+        const messages = ListMessagesService.execute(room_id)
 
         return res.json(messages)
     }

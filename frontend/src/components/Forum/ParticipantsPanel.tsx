@@ -1,13 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import "./ParticipantsPanel.css";
+import type { Participant } from "../../types";
 
-interface Participant {
-  id?: string;
-  name: string;
+interface ParticipantsPanelProps {
+  participants: Participant[];
+  selectedUser: string | null;
+  onSelectUser: (userId: string | null) => void;
 }
 
-export function ParticipantsPanel({ participants = [] }: { participants?: Participant[] }) {
+export function ParticipantsPanel({ participants, selectedUser, onSelectUser }: ParticipantsPanelProps) {
   const navigate = useNavigate();
+
+  function selecionar(userId: string) {
+    onSelectUser(userId);
+  }
 
   return (
     <div className="participants-wrapper">
@@ -33,14 +39,18 @@ export function ParticipantsPanel({ participants = [] }: { participants?: Partic
         />
 
         <div className="participants-list">
-          {participants.map((p, idx) => (
-            <div key={p.id ?? p.name ?? idx} className="participant-item">
+          {participants.map((p) => (
+            <div
+              key={p.id}
+              className={`participant-item ${selectedUser === p.user_id ? "selected" : ""}`}
+              onClick={() => selecionar(p.user_id)}
+            >
               <img
-                src={`https://i.pravatar.cc/40?u=${encodeURIComponent(p.name)}`}
-                alt={p.name}
+                src={`https://i.pravatar.cc/40?u=${p.user_id}`}
+                alt={p.user.name}
                 className="participant-avatar"
               />
-              <span className="participant-name">{p.name}</span>
+              <span className="participant-name">{p.user.name}</span>
             </div>
           ))}
         </div>

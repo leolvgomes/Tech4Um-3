@@ -117,7 +117,7 @@ export function GroupsPanel() {
             key={g.id}
             type="button"
             className="group-card group-card-button"
-            onClick={() => navigate(`/forum/${g.id}`, { state: { fromDashboard: true } })}
+            onClick={() => navigate(`/rooms/${g.id}`, { state: { fromDashboard: true } })}
             aria-label={`Abrir fórum ${g.name}`}
           >
             <h4 className="group-title">{g.name}</h4>

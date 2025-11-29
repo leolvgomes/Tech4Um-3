@@ -1,72 +1,180 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { socket } from "../../socket";
+import { AuthContext } from "../../api/AuthContext";
 import "./ChatPanel.css";
 
 type Message = {
   id?: string;
   content: string;
-  created_at?: string;
-  sender?: { name?: string; email?: string; id?: string };
+  room_id: string;
+  sender_id: string;
+  receiver_id: string | null;
+  created_at: string;
+  sender: {
+    id: string;
+    name: string;
+    email: string;
+  };
 };
 
-interface ChatPanelProps {
-  roomName?: string;
-  createdBy?: string;
-  messages?: Message[];
-  onSend?: (content: string) => Promise<void> | void;
+interface Participant {
+  id: string;
+  user_id: string;
+  room_id: string;
+  joined_at: string;
+  user: {
+    id: string;
+    name: string;
+  };
 }
 
-export function ChatPanel({ roomName = "Sala", createdBy = "", messages = [], onSend }: ChatPanelProps) {
-  const [input, setInput] = useState("");
+interface Room {
+  id: string;
+  name: string;
+  description: string;
+  creator: {
+    name: string;
+    email: string;
+  };
+}
 
-  async function handleSend() {
-    const content = input.trim();
-    if (!content) return;
-    if (onSend) {
+interface ChatPanelProps {
+  roomId: string;
+  participants: Participant[];
+  selectedUser: string | null;
+}
+
+export function ChatPanel({ roomId, participants, selectedUser }: ChatPanelProps) {
+  const [mensagens, setMensagens] = useState<Message[]>([]);
+  const [mensagem, setMensagem] = useState("");
+  const [room, setRoom] = useState<Room | null>(null);
+  const { user } = useContext(AuthContext);
+
+  const token = localStorage.getItem("token");
+  const meuUserId = user?.id;
+
+  // Nome do destinatário
+  const receiverName =
+    participants.find((p) => p.user_id === selectedUser)?.user.name || "todos";
+
+  // -----------------------------
+  // CARREGAR SALA
+  // -----------------------------
+  useEffect(() => {
+    if (!token) return;
+
+    async function carregarSala() {
       try {
-        await onSend(content);
+        const resp = await fetch(`http://localhost:3333/rooms`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const salas = await resp.json();
+        const salaAtual = salas.find((r: any) => r.id === roomId);
+        setRoom(salaAtual ?? null);
+
       } catch (err) {
-        console.error("Erro ao enviar mensagem:", err);
+        console.error("Erro ao buscar dados da sala:", err);
       }
     }
-    setInput("");
+
+    carregarSala();
+  }, [token, roomId]);
+
+  // -----------------------------
+  // CARREGAR HISTÓRICO DE MENSAGENS
+  // -----------------------------
+  useEffect(() => {
+    if (!token) return;
+
+    async function carregarMensagens() {
+      try {
+        const resp = await fetch(`http://localhost:3333/messages/${roomId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await resp.json();
+        if (Array.isArray(data)) setMensagens(data);
+
+      } catch (err) {
+        console.error("Erro ao buscar mensagens:", err);
+      }
+    }
+
+    carregarMensagens();
+  }, [token, roomId]);
+
+  // -----------------------------
+  // RECEBER MENSAGENS EM TEMPO REAL
+  // -----------------------------
+  useEffect(() => {
+    function handleNovaMensagem(msg: Message) {
+      setMensagens((prev) => [...prev, msg]);
+    }
+
+    socket.on("message", handleNovaMensagem);
+
+    return () => {
+      socket.off("message", handleNovaMensagem);
+    };
+  }, []);
+
+  // -----------------------------
+  // ENVIAR MENSAGEM
+  // -----------------------------
+  function handleSend() {
+    if (!mensagem.trim()) return;
+
+    socket.emit("message", {
+      room_id: roomId,
+      content: mensagem,
+      receiver_id: selectedUser || null,
+    });
+
+    setMensagem("");
   }
 
+  // -----------------------------
+  // RENDER
+  // -----------------------------
   return (
     <main className="chat-panel">
       <div className="chat-header">
-        <h2>{roomName}</h2>
-        <span className="chat-created-by">
-          {createdBy ? (
-            <>
-              Criado por: <b>{createdBy}</b>
-            </>
-          ) : null}
-        </span>
+        <h2>{room?.name ?? "Chat da Sala"}</h2>
       </div>
 
       <div className="chat-messages">
-        {messages.map((m, idx) => (
-          <div className="chat-item" key={m.id ?? idx}>
-            <div className="chat-content">
-              <span className="chat-author">{m.sender?.name ?? "Anon"}</span>
-              <p className="chat-text">{m.content}</p>
+        {mensagens
+          .filter(
+            (m) =>
+              m.receiver_id === null || // mensagem aberta
+              m.receiver_id === meuUserId || // privada pra mim
+              m.sender_id === meuUserId // enviada por mim
+          )
+          .map((m) => (
+            <div key={m.id} className="chat-item">
+              <div className="chat-content">
+                <span className="chat-author">{m.sender?.name ?? "Usuário"}</span>
+                <p className="chat-text">{m.content}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       <div className="chat-typing">&nbsp;</div>
 
       <div className="chat-input-box">
-        <div className="chat-input-header">Enviando para todos do 4um</div>
+        <div className="chat-input-header">
+          Enviando para: <b>{receiverName}</b>
+        </div>
 
         <div className="chat-input-row">
           <input
             type="text"
             placeholder="Escreva aqui uma mensagem..."
             className="chat-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={mensagem}
+            onChange={(e) => setMensagem(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
@@ -74,7 +182,9 @@ export function ChatPanel({ roomName = "Sala", createdBy = "", messages = [], on
               }
             }}
           />
-          <button className="chat-send-button" onClick={handleSend}>➤</button>
+          <button className="chat-send-button" onClick={handleSend}>
+            ➤
+          </button>
         </div>
       </div>
     </main>

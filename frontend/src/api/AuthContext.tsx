@@ -8,7 +8,7 @@ interface AuthProviderProps {
 
 interface AuthContextData {
   token: string | null;
-  user: { name: string; email: string } | null;
+  user: {id:string; name: string; email: string } | null;
   login: (token: string, userData: any) => void;
   logout: () => void;
 }
@@ -22,7 +22,7 @@ export const AuthContext = createContext<AuthContextData>({
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{id:string; name: string; email: string } | null>(null);
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");

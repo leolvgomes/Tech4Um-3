@@ -6,7 +6,7 @@ type Room = {
   id: string;
   name: string;
   description?: string | null;
-  created_at?: string;
+  membersCount?: number;
 };
 
 export function ForumGrid({ query }: { query?: string }) {
@@ -19,7 +19,10 @@ export function ForumGrid({ query }: { query?: string }) {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:3333/rooms", {
+        const base = "http://localhost:3333";
+
+        // 1️⃣ Buscar todas as salas
+        const res = await fetch(`${base}/rooms`, {
           headers: {
             "Content-Type": "application/json",
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -34,8 +37,37 @@ export function ForumGrid({ query }: { query?: string }) {
           return;
         }
 
-        const data = await res.json();
-        setRooms(data || []);
+        const allRooms = await res.json();
+
+        // 2️⃣ Buscar quantidade de membros de cada sala
+        const roomsWithMembers = await Promise.all(
+          allRooms.map(async (r: any) => {
+            try {
+              const membersRes = await fetch(`${base}/rooms/${r.id}`, {
+                headers: {
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+              });
+
+              const members = membersRes.ok ? await membersRes.json() : [];
+              return {
+                id: r.id,
+                name: r.name,
+                description: r.description,
+                membersCount: Array.isArray(members) ? members.length : 0,
+              };
+            } catch (err) {
+              return {
+                id: r.id,
+                name: r.name,
+                description: r.description,
+                membersCount: 0,
+              };
+            }
+          })
+        );
+
+        setRooms(roomsWithMembers);
       } catch (err) {
         console.error("Erro ao buscar fóruns:", err);
         setError("Erro ao conectar com servidor");
@@ -53,8 +85,9 @@ export function ForumGrid({ query }: { query?: string }) {
   const q = (query || "").trim().toLowerCase();
   const filtered = q
     ? rooms.filter((r) =>
-      r.name.toLowerCase().includes(q) || (r.description || "").toLowerCase().includes(q)
-    )
+        r.name.toLowerCase().includes(q) ||
+        (r.description || "").toLowerCase().includes(q)
+      )
     : rooms;
 
   return (
@@ -65,12 +98,15 @@ export function ForumGrid({ query }: { query?: string }) {
           id={r.id}
           title={r.name}
           creator={""}
-          people={0}
+          people={r.membersCount ?? 0}
           highlight={false}
           description={r.description || ""}
         />
       ))}
-      {filtered.length === 0 && <div className="no-results">Nenhum fórum encontrado.</div>}
+
+      {filtered.length === 0 && (
+        <div className="no-results">Nenhum fórum encontrado.</div>
+      )}
     </div>
   );
 }

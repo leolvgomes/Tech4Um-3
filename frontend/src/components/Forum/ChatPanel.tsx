@@ -108,16 +108,19 @@ export function ChatPanel({ roomId, participants, selectedUser }: ChatPanelProps
   // RECEBER MENSAGENS EM TEMPO REAL
   // -----------------------------
   useEffect(() => {
-    function handleNovaMensagem(msg: Message) {
-      setMensagens((prev) => [...prev, msg]);
-    }
+  socket.emit("join_room", roomId);
 
-    socket.on("message", handleNovaMensagem);
+  function handleNovaMensagem(msg: Message) {
+    setMensagens((prev) => [...prev, msg]);
+  }
 
-    return () => {
-      socket.off("message", handleNovaMensagem);
-    };
-  }, []);
+  socket.on("message_received", handleNovaMensagem);
+
+  return () => {
+    socket.off("message_received", handleNovaMensagem);
+  };
+}, [roomId]);
+
 
   // -----------------------------
   // ENVIAR MENSAGEM
@@ -154,7 +157,7 @@ export function ChatPanel({ roomId, participants, selectedUser }: ChatPanelProps
           .map((m) => (
             <div key={m.id} className="chat-item">
               <div className="chat-content">
-                <span className="chat-author">{m.sender?.name ?? "Usuário"}</span>
+                <span className="chat-author">{m.sender?.name ?? "Você"}</span>
                 <p className="chat-text">{m.content}</p>
               </div>
             </div>

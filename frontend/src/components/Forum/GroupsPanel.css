@@ -1,0 +1,39 @@
+.groups-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 85%;
+  gap: 18px;
+}
+
+.group-card {
+  background: white;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.group-card-button {
+  text-align: left;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  background: white;
+}
+
+.group-card-button:focus {
+  outline: 2px solid rgba(38,99,194,0.25);
+  outline-offset: 2px;
+}
+
+.group-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2663c2;
+}
+
+.group-sub {
+  font-size: 13px;
+  margin-top: 4px;
+  color: #777;
+}

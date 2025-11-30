@@ -1,0 +1,105 @@
+
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  color: #004caa;
+}
+
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  /* recomendo usar vh para garantir altura conhecida */
+  height: calc(100vh - 120px); /* ajuste conforme seu header/espacamento externo */
+  max-height: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.chat-messages {
+  overflow-y: auto;
+  /* garante que a área de mensagens ocupe todo o espaço disponível */
+  flex: 1 1 auto;
+  min-height: 0; /* IMPORTANTE para evitar overflow do flex child */
+}
+
+/* mantém o input sempre visível no final do painel */
+.chat-input-box {
+  position: sticky;
+  bottom: 0;
+  margin-top: 12px; /* opcional */
+  background: #0f63d8;
+  color: white;
+  border-radius: 14px;
+  padding: 14px;
+  z-index: 10; /* garante sobreposição se necessário */
+}
+
+
+.chat-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.chat-author {
+  font-weight: bold;
+  color : #2663c2;
+}
+
+.chat-text {
+  margin-top: -2px;
+}
+
+.chat-typing {
+  margin: 10px 0;
+  font-size: 13px;
+  color: #888;
+}
+
+
+
+.chat-input-header {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+.chat-send-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #004caa;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  flex-shrink: 0;
+}

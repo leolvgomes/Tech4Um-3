@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f4f6f8;
+}
+
+.header button {
+  color: #5E7488;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: none;
+  outline: none; /* remove contorno ao clicar */
+  background: none; /* opcional, deixa sem fundo */
+  cursor: pointer;
+}
+
+#loginIcon{
+    width: 24px;
+    height: 24px;
+     border-radius: 20%;  
+    border: 2px solid #5E7488; 
+    padding: 4px; 
+    object-fit: cover;
+}

@@ -1,0 +1,8 @@
+.forum-grid {
+  width: 100%;
+  max-width: 1080px;
+  margin: 20px auto 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}

@@ -1,0 +1,10 @@
+.forum-container {
+  width: 97.3%;
+  height: calc(100vh - 100px);
+  display: grid;
+  grid-template-columns: 280px 1fr 260px;
+  gap: 24px;
+  padding: 20px;
+  background: #f5f6f9;
+  overflow: hidden;
+}
